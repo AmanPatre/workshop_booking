@@ -248,13 +248,13 @@ color-coded chart buttons
 
 **Mobile Menu Implementation:**
 ```javascript
-// Mobile menu toggle functionality
+
 $(document).ready(function() {
   const mobileMenuToggle = $('#mobileMenuToggle');
   const mobileMenu = $('#mobileMenu');
   const mobileMenuOverlay = $('#mobileMenuOverlay');
 
-  // Open mobile menu
+  
   mobileMenuToggle.on('click', function() {
     mobileMenu.addClass('active');
     mobileMenuOverlay.css({
@@ -264,7 +264,7 @@ $(document).ready(function() {
     $('body').css('overflow', 'hidden');
   });
 
-  // Close mobile menu function
+  
   function closeMobileMenu() {
     mobileMenu.removeClass('active');
     mobileMenuOverlay.css({
