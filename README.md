@@ -186,7 +186,8 @@ This project involved modernizing and improving the user interface for a Django-
 
 ### Desktop View
 **Before**: Basic Bootstrap layout with standard navbar
-![alt text](full_view_before.png)
+<img width="1918" height="845" alt="full_view_before" src="https://github.com/user-attachments/assets/5b66dda5-8851-4709-a3e5-ea41eddb6b5f" />
+
 **After**: Enhanced layout with improved spacing, modern navigation, and better visual hierarchy
 ![alt text](image.png)
 
