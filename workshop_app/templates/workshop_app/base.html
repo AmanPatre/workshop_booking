@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html>
-{% load static %}
-{% load custom_filters %}
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        {% block title %}
-            HomePage
-        {% endblock %}
-    </title>
+  {% load static %} {% load custom_filters %}
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %} HomePage {% endblock %}</title>
 
     <script src="{% static 'workshop_app/js/jquery-3.4.1.min.js' %}"></script>
     <script src="{% static 'workshop_app/js/bootstrap.min.js' %}"></script>
@@ -17,119 +12,610 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
+    {% block extra-dependencies %} {% endblock %}
 
-    {% block extra-dependencies %}
-    {% endblock %}
+    <link
+      rel="stylesheet"
+      href="{% static 'workshop_app/css/bootstrap.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'workshop_app/css/toastr.min.css' %}"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'workshop_app/css/base.css' %}"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'workshop_app/css/font-awesome.css' %}"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+    />
 
-    <link rel="stylesheet" href="{% static 'workshop_app/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'workshop_app/css/toastr.min.css' %}">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'workshop_app/css/base.css' %}" type="text/css"/>
-    <link rel="stylesheet" href="{% static 'workshop_app/css/font-awesome.css' %}" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <style>
+      
+      
+      .navbar {
+        transition: all 0.3s ease;
+        background-color: #343a40 !important; 
+      }
 
-    {% block extra-custom-scripts %}
-    {% endblock %}
+      
+      .nav-link-custom::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 4px;
+        width: 100%;
+        height: 2px;
+        background-color: #fff;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+      }
 
-</head>
+      .nav-link-custom:hover::after,
+      .nav-link-custom:focus::after {
+        transform: scaleX(1);
+      }
 
-<body>
-{% block header %}
+      .nav-link-custom.active::after {
+        transform: scaleX(1);
+        background-color: #ffc107;
+      }
+
+      .nav-link-custom.active:hover::after {
+        background-color: #ffc107;
+      }
+
+     
+      .hamburger {
+        width: 28px;
+        height: 22px;
+        cursor: pointer;
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .hamburger span {
+        display: block;
+        position: absolute;
+        height: 2.5px;
+        width: 100%;
+        background: #fff;
+        border-radius: 2px;
+        opacity: 1;
+        left: 0;
+        transform: rotate(0deg);
+        transition: 0.25s ease-in-out;
+      }
+
+      .hamburger span:nth-child(1) { top: 0px; }
+      .hamburger span:nth-child(2), .hamburger span:nth-child(3) { top: 9px; }
+      .hamburger span:nth-child(4) { top: 18px; }
+
+      .hamburger.active {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      
+      .mobile-menu {
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        -webkit-overflow-scrolling: touch;
+        transform: translateX(-100%);
+        background-color: #343a40 !important; /* Match navbar background exactly */
+      }
+
+      .mobile-menu.active {
+        transform: translateX(0);
+      }
+
+      
+      .mobile-user-profile {
+        background-color: #495057 !important; 
+      }
+
+      
+      .mobile-menu.active .mobile-menu-nav .nav-item {
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: slideInLeft 0.4s ease forwards;
+      }
+
+      .mobile-menu.active .mobile-menu-nav .nav-item:nth-child(1) { animation-delay: 0.1s; }
+      .mobile-menu.active .mobile-menu-nav .nav-item:nth-child(2) { animation-delay: 0.2s; }
+      .mobile-menu.active .mobile-menu-nav .nav-item:nth-child(3) { animation-delay: 0.3s; }
+      .mobile-menu.active .mobile-menu-nav .nav-item:nth-child(4) { animation-delay: 0.4s; }
+      .mobile-menu.active .mobile-menu-nav .nav-item:nth-child(5) { animation-delay: 0.5s; }
+
+      @keyframes slideInLeft {
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* Mobile menu header - ensure consistent background */
+      .mobile-menu-header {
+        background-color: #373c40ff !important; /* Match navbar */
+        border-bottom: 1px solid #495057 !important; /* Subtle border */
+      }
+
+      
+      .mobile-menu-nav .nav-link:hover {
+        background-color: #2e3337ff !important;
+        transition: all 0.3s ease;
+      }
+
+      .mobile-menu-nav .nav-link.active {
+        background-color: #495057 !important;
+        border-left: 3px solid #ffc107 !important;
+      }
+
+     
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+
+      @media (prefers-contrast: high) {
+        .navbar { border-bottom: 2px solid #fff; }
+        .mobile-menu { border-right: 2px solid #fff; }
+      }
+
+      @media print {
+        .navbar, .mobile-menu, .mobile-menu-overlay, .footer { display: none !important; }
+        .base-content { margin-top: 0; padding: 0; }
+      }
+    </style>
+
+    {% block extra-custom-scripts %} {% endblock %}
+  </head>
+
+  <body>
+    {% block header %}
+    <!-- Bootstrap Navbar with custom positioning -->
     <nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top">
+      <div class="container-fluid px-2 px-sm-3">
+        <!-- Brand with Bootstrap spacing -->
         {% if user.is_authenticated %}
-        <a class="navbar-brand text-white" href="{% url 'workshop_app:index' %}">FOSSEE Workshops</a>
+        <a class="navbar-brand text-white font-weight-bold" href="{% url 'workshop_app:index' %}">
+          FOSSEE Workshops
+        </a>
         {% else %}
-        <a class="navbar-brand text-white" href="{{request.scheme}}://{{request.get_host}}">FOSSEE Workshops</a>
+        <a class="navbar-brand text-white font-weight-bold" href="{{request.scheme}}://{{request.get_host}}">
+          FOSSEE Workshops
+        </a>
         {% endif %}
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+
+        <!-- Mobile hamburger button with Bootstrap classes -->
+        <button
+          class="navbar-toggler border-0 bg-transparent p-2 d-lg-none"
+          type="button"
+          id="mobileMenuToggle"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+        >
+          <div class="hamburger position-relative" id="hamburgerIcon">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/">
-                        Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'statistics_app:public' %}">
-                        Workshop Statistics
-                    </a>
-                </li>
-            </ul>
-            {% if user.is_authenticated %}
-            <ul class="navbar-nav mr-auto">
-                {% if request.user|has_group:"instructor" %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'statistics_app:team' %}">
-                        Team Statistics
-                    </a>
-                </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'workshop_app:workshop_status_instructor' %}">
-                        Workshop Status
-                    </a>
-                </li>
-                {% if not request.user|has_group:"instructor" %}
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{% url 'workshop_app:propose_workshop' %}">
-                            Propose Workshop
-                        </a>
-                    </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'workshop_app:workshop_type_list' %}">
-                        Workshop Types
-                    </a>
-                </li>
-            </ul>
-            <div class="my-2 my-lg-0">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                           <span class="material-icons" style="vertical-align: middle">account_circle</span>
-                            <p style="display: inline; vertical-align: middle">
-                                {{user.get_full_name|title}}
-                            </p>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{% url 'workshop_app:view_own_profile' %}">Profile</a>
-                            <a class="dropdown-item" href="{% url 'password_change' %}">
-                                 Change Password
-                            </a>
-                            <a class="dropdown-item" href="{% url 'workshop_app:logout' %}">Logout</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            {% endif %}
+
+        <!-- Desktop menu with Bootstrap flex utilities -->
+        <div class="collapse navbar-collapse justify-content-center d-none d-lg-flex" id="navbarSupportedContent">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item mx-1">
+              <a class="nav-link text-white font-weight-medium px-3 py-2 position-relative nav-link-custom" href="/" data-page="home">
+                <i class="fa fa-home mr-2" aria-hidden="true"></i> Home
+              </a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link text-white font-weight-medium px-3 py-2 position-relative nav-link-custom" href="{% url 'statistics_app:public' %}" data-page="statistics">
+                <i class="fa fa-bar-chart mr-2" aria-hidden="true"></i> Workshop Statistics
+              </a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link text-white font-weight-medium px-3 py-2 position-relative nav-link-custom" href="{% url 'workshop_app:workshop_status_instructor' %}" data-page="status">
+                <i class="fa fa-info-circle mr-2" aria-hidden="true"></i> Workshop Status
+              </a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link text-white font-weight-medium px-3 py-2 position-relative nav-link-custom" href="{% url 'workshop_app:propose_workshop' %}" data-page="propose">
+                <i class="fa fa-plus mr-2" aria-hidden="true"></i> Propose Workshop
+              </a>
+            </li>
+            <li class="nav-item mx-1">
+              <a class="nav-link text-white font-weight-medium px-3 py-2 position-relative nav-link-custom" href="{% url 'workshop_app:workshop_type_list' %}" data-page="types">
+                <i class="fa fa-list mr-2" aria-hidden="true"></i> Workshop Types
+              </a>
+            </li>
+          </ul>
         </div>
+
+        <!-- Desktop user dropdown with Bootstrap classes -->
+        {% if user.is_authenticated %}
+        <div class="my-2 my-lg-0 d-none d-lg-block">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle text-white d-flex align-items-center"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <span class="material-icons mr-2">account_circle</span>
+                <span>{{ user.get_full_name|title }}</span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right border-0 shadow-lg rounded mt-2" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item py-3 px-4" href="{% url 'workshop_app:view_own_profile' %}">
+                  <i class="fa fa-user mr-3" aria-hidden="true"></i> Profile
+                </a>
+                <a class="dropdown-item py-3 px-4" href="{% url 'password_change' %}">
+                  <i class="fa fa-lock mr-3" aria-hidden="true"></i> Change Password
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item py-3 px-4" href="{% url 'workshop_app:logout' %}">
+                  <i class="fa fa-sign-out mr-3" aria-hidden="true"></i> Logout
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+        {% endif %}
+      </div>
     </nav>
-{% endblock %}
 
-<div class="base-content">
-    {% block content %}
-        <h1>Base Template Content. Please override me</h1>
+    <!-- Mobile menu overlay with Bootstrap utilities -->
+    <div class="mobile-menu-overlay position-fixed w-100 h-100" 
+         style="top: 0; left: 0; background-color: rgba(0, 0, 0, 0.5); opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1040;" 
+         id="mobileMenuOverlay"></div>
+
+    <!-- Mobile slide-in menu with Bootstrap classes - UPDATED background -->
+    <div class="mobile-menu position-fixed h-100 overflow-auto shadow-lg d-lg-none" 
+         style="top: 0; left: 0; width: 300px; z-index: 1050;" 
+         id="mobileMenu">
+      
+      <!-- Mobile menu header with Bootstrap flex - UPDATED -->
+      <div class="mobile-menu-header d-flex justify-content-between align-items-center p-4">
+        <h5 class="text-white font-weight-bold mb-0">FOSSEE Workshops</h5>
+        <button class="btn btn-link text-white p-2 border-0 bg-transparent" 
+                style="width: 40px; height: 40px; border-radius: 6px; transition: background-color 0.3s ease;"
+                id="mobileMenuClose" 
+                aria-label="Close menu">
+          <span style="font-size: 1.2rem; line-height: 1;">×</span>
+        </button>
+      </div>
+
+      <!-- Mobile user profile section with Bootstrap classes - UPDATED -->
+      {% if user.is_authenticated %}
+      <div class="mobile-user-profile p-4 border-bottom" style="border-color: #6c757d !important;">
+        <div class="mobile-user-info d-flex align-items-center text-white mb-3">
+          <span class="material-icons mr-3 text-muted" style="font-size: 2.5rem;">account_circle</span>
+          <div>
+            <div class="font-weight-bold" style="font-size: 1.1rem;">{{ user.get_full_name|title }}</div>
+            <small class="text-muted" style="font-size: 0.875rem;">{{ user.email }}</small>
+          </div>
+        </div>
+        <div class="mobile-user-actions">
+          <a class="nav-link text-white py-2 px-0 mb-1 font-weight-medium" 
+             style="transition: all 0.3s ease; font-size: 0.95rem;"
+             href="{% url 'workshop_app:view_own_profile' %}">
+            <i class="fa fa-user mr-3" aria-hidden="true"></i> Profile
+          </a>
+          <a class="nav-link text-white py-2 px-0 mb-1 font-weight-medium" 
+             style="transition: all 0.3s ease; font-size: 0.95rem;"
+             href="{% url 'password_change' %}">
+            <i class="fa fa-lock mr-3" aria-hidden="true"></i> Change Password
+          </a>
+          <a class="nav-link text-white py-2 px-0 font-weight-medium" 
+             style="transition: all 0.3s ease; font-size: 0.95rem;"
+             href="{% url 'workshop_app:logout' %}">
+            <i class="fa fa-sign-out mr-3" aria-hidden="true"></i> Logout
+          </a>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Mobile menu navigation with Bootstrap classes -->
+      <nav class="mobile-menu-nav py-3">
+        <div class="nav-item">
+          <a class="nav-link text-white d-flex align-items-center py-3 px-4 font-weight-medium" 
+             style="transition: all 0.3s ease; border-bottom: 1px solid #495057;"
+             href="/" data-page="home">
+            <i class="fa fa-home mr-3" style="width: 20px; text-align: center; font-size: 1.1rem;" aria-hidden="true"></i> Home
+          </a>
+        </div>
+        <div class="nav-item">
+          <a class="nav-link text-white d-flex align-items-center py-3 px-4 font-weight-medium" 
+             style="transition: all 0.3s ease; border-bottom: 1px solid #495057;"
+             href="{% url 'statistics_app:public' %}" data-page="statistics">
+            <i class="fa fa-bar-chart mr-3" style="width: 20px; text-align: center; font-size: 1.1rem;" aria-hidden="true"></i> Workshop Statistics
+          </a>
+        </div>
+        <div class="nav-item">
+          <a class="nav-link text-white d-flex align-items-center py-3 px-4 font-weight-medium" 
+             style="transition: all 0.3s ease; border-bottom: 1px solid #495057;"
+             href="{% url 'workshop_app:workshop_status_instructor' %}" data-page="status">
+            <i class="fa fa-info-circle mr-3" style="width: 20px; text-align: center; font-size: 1.1rem;" aria-hidden="true"></i> Workshop Status
+          </a>
+        </div>
+        <div class="nav-item">
+          <a class="nav-link text-white d-flex align-items-center py-3 px-4 font-weight-medium" 
+             style="transition: all 0.3s ease; border-bottom: 1px solid #495057;"
+             href="{% url 'workshop_app:propose_workshop' %}" data-page="propose">
+            <i class="fa fa-plus mr-3" style="width: 20px; text-align: center; font-size: 1.1rem;" aria-hidden="true"></i> Propose Workshop
+          </a>
+        </div>
+        <div class="nav-item">
+          <a class="nav-link text-white d-flex align-items-center py-3 px-4 font-weight-medium" 
+             style="transition: all 0.3s ease; border-bottom: 1px solid #495057;"
+             href="{% url 'workshop_app:workshop_type_list' %}" data-page="types">
+            <i class="fa fa-list mr-3" style="width: 20px; text-align: center; font-size: 1.1rem;" aria-hidden="true"></i> Workshop Types
+          </a>
+        </div>
+      </nav>
+    </div>
     {% endblock %}
-</div>
 
-<script>
-    {% if messages %}
+    <!-- Main content with Bootstrap spacing -->
+    <div class="base-content" style="margin-top: 56px; min-height: calc(100vh - 56px); padding: 1rem;">
+      {% block content %}
+      <div class="container-fluid">
+        <div class="welcome-section bg-light rounded p-4 my-3">
+          <h1 class="h2">Base Template Content. Please override me</h1>
+        </div>
+      </div>
+      {% endblock %}
+    </div>
+
+    <!-- JavaScript for mobile menu functionality -->
+    <script>
+      $(document).ready(function() {
+        const mobileMenuToggle = $('#mobileMenuToggle');
+        const mobileMenu = $('#mobileMenu');
+        const mobileMenuOverlay = $('#mobileMenuOverlay');
+        const mobileMenuClose = $('#mobileMenuClose');
+        const hamburgerIcon = $('#hamburgerIcon');
+
+       
+        function setActiveMenuItem(activeItem) {
+          $('.nav-link-custom').removeClass('active');
+          $('.mobile-menu-nav .nav-link').removeClass('active');
+          $(activeItem).addClass('active');
+
+          const page = $(activeItem).data('page');
+          $(`.mobile-menu-nav .nav-link[data-page="${page}"]`).addClass('active');
+        }
+
+       
+        $('.nav-link-custom').on('click', function(e) {
+          setActiveMenuItem(this);
+          const page = $(this).data('page');
+          if (typeof(Storage) !== "undefined") {
+            localStorage.setItem('activeMenuItem', page);
+          }
+        });
+
+        $('.mobile-menu-nav .nav-link').on('click', function(e) {
+          const page = $(this).data('page');
+          const desktopLink = $(`.nav-link-custom[data-page="${page}"]`);
+          if (desktopLink.length) {
+            setActiveMenuItem(desktopLink[0]);
+            if (typeof(Storage) !== "undefined") {
+              localStorage.setItem('activeMenuItem', page);
+            }
+          }
+        });
+
+        
+        function initializeActiveState() {
+          if (typeof(Storage) !== "undefined") {
+            const storedActive = localStorage.getItem('activeMenuItem');
+            if (storedActive) {
+              const activeLink = $(`.nav-link-custom[data-page="${storedActive}"]`);
+              if (activeLink.length) {
+                setActiveMenuItem(activeLink[0]);
+                return;
+              }
+            }
+          }
+          const firstMenuItem = $('.nav-link-custom').first();
+          if (firstMenuItem.length) {
+            setActiveMenuItem(firstMenuItem[0]);
+          }
+        }
+
+        initializeActiveState();
+
+        
+        mobileMenuToggle.on('click', function() {
+          mobileMenu.addClass('active');
+          mobileMenuOverlay.css({
+            'opacity': '1',
+            'visibility': 'visible'
+          });
+          hamburgerIcon.addClass('active');
+          mobileMenuToggle.attr('aria-expanded', 'true');
+          $('body').css('overflow', 'hidden');
+
+          setTimeout(() => {
+            mobileMenuClose.focus();
+          }, 300);
+        });
+
+        
+        function closeMobileMenu() {
+          mobileMenu.removeClass('active');
+          mobileMenuOverlay.css({
+            'opacity': '0',
+            'visibility': 'hidden'
+          });
+          hamburgerIcon.removeClass('active');
+          mobileMenuToggle.attr('aria-expanded', 'false');
+          $('body').css('overflow', '');
+          mobileMenuToggle.focus();
+        }
+
+        
+        mobileMenuClose.on('click', closeMobileMenu);
+        mobileMenuOverlay.on('click', closeMobileMenu);
+        
+        $('.mobile-menu-nav .nav-link, .mobile-user-actions .nav-link').on('click', function() {
+          setTimeout(closeMobileMenu, 150);
+        });
+
+       
+        $(window).on('resize', function() {
+          if ($(window).width() >= 992) {
+            closeMobileMenu();
+          }
+        });
+
+        
+        mobileMenu.on('click', function(e) {
+          e.stopPropagation();
+        });
+
+       
+        $(document).on('keydown', function(e) {
+          if (e.key === 'Escape' && mobileMenu.hasClass('active')) {
+            closeMobileMenu();
+          }
+        });
+
+        
+        $('.mobile-menu-nav .nav-link').hover(
+          function() {
+            if (!$(this).hasClass('active')) {
+              $(this).css({
+                'background-color': '#495057',
+                'padding-left': '2rem'
+              });
+            }
+          },
+          function() {
+            if (!$(this).hasClass('active')) {
+              $(this).css({
+                'background-color': 'transparent',
+                'padding-left': '1.5rem'
+              });
+            }
+          }
+        );
+
+        
+        $('.mobile-user-actions .nav-link').hover(
+          function() {
+            $(this).css({
+              'padding-left': '1rem',
+              'background-color': '#6c757d'
+            });
+          },
+          function() {
+            $(this).css({
+              'padding-left': '0',
+              'background-color': 'transparent'
+            });
+          }
+        );
+
+        
+        $('.mobile-menu-nav .nav-link.active').css({
+          'background-color': '#495057',
+          'padding-left': '2rem',
+          'border-left': '3px solid #ffc107'
+        });
+
+        
+        $('#mobileMenuClose').hover(
+          function() {
+            $(this).css('background-color', '#495057');
+          },
+          function() {
+            $(this).css('background-color', 'transparent');
+          }
+        );
+
+        
+        let startX = 0;
+        let currentX = 0;
+        let isSwiping = false;
+
+        mobileMenu.on('touchstart', function(e) {
+          startX = e.touches[0].clientX;
+          isSwiping = true;
+        });
+
+        mobileMenu.on('touchmove', function(e) {
+          if (!isSwiping) return;
+          currentX = e.touches[0].clientX;
+          const diffX = startX - currentX;
+          if (diffX > 0 && diffX > 50) {
+            e.preventDefault();
+          }
+        });
+
+        mobileMenu.on('touchend', function(e) {
+          if (!isSwiping) return;
+          isSwiping = false;
+          const diffX = startX - currentX;
+          if (diffX > 100) {
+            closeMobileMenu();
+          }
+        });
+      });
+
+      
+      {% if messages %}
         {% for message in messages %}
-            toastr[{% if message.tags %} "{{ message.tags }}" {% else %} "info" {% endif %}]("{{ message }}");
+          toastr[{% if message.tags %} "{{ message.tags }}" {% else %} "info" {% endif %}]("{{ message }}");
         {% endfor %}
-    {% endif %}
-</script>
+      {% endif %}
 
-</body>
-<footer class="footer">
+     
+      $('a[href*="#"]').not('[href="#"]').not('[href="#0"]').click(function(event) {
+        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+          var target = $(this.hash);
+          target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+          if (target.length) {
+            event.preventDefault();
+            $('html, body').animate({
+              scrollTop: target.offset().top - 70
+            }, 1000);
+          }
+        }
+      });
+    </script>
+  </body>
+  
+  <!-- Footer with Bootstrap classes -->
+  <footer class="footer mt-auto p-3 bg-light border-top text-center">
     {% block footer %}
-       <div class="container">
-           Developed by FOSSEE group, IIT Bombay
-       </div> 
+    <div class="container">
+      <small>Developed by FOSSEE group, IIT Bombay</small>
+    </div>
     {% endblock %}
-</footer>
+  </footer>
 </html>
