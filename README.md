@@ -189,41 +189,48 @@ This project involved modernizing and improving the user interface for a Django-
 <img width="1918" height="845" alt="full_view_before" src="https://github.com/user-attachments/assets/5b66dda5-8851-4709-a3e5-ea41eddb6b5f" />
 
 **After**: Enhanced layout with improved spacing, modern navigation, and better visual hierarchy
-![alt text](image.png)
+  <img width="1916" height="792" alt="image" src="https://github.com/user-attachments/assets/d9c4e706-fb7a-4886-b56b-cd19238d002e" />
+
 
 ### Mobile View  
 **Before**: Cramped mobile experience with difficult-to-use controls
 
-![alt text](mobile_resp.png)
-![alt text](stats_page_mob.png)
+<img width="476" height="680" alt="image" src="https://github.com/user-attachments/assets/703878f5-5b73-4e47-a910-fcaa75eebfe0" />
+<img width="421" height="697" alt="image" src="https://github.com/user-attachments/assets/401410d9-8cf9-4fb0-be64-22f043f4c683" />
+
+
 
 **After**: Slide-in navigation, optimized touch targets, and 
 color-coded chart buttons
-![alt text](image-1.png)
-![alt text](image-2.png)
+<img width="498" height="289" alt="image" src="https://github.com/user-attachments/assets/03983295-c04f-4997-bc9b-40df3b3449ab" />
+<img width="434" height="724" alt="image" src="https://github.com/user-attachments/assets/fe83b66b-937e-4602-bdd6-a67627b82a15" />
+
 
 ### Table Experience
 **Before**: Basic responsive table with limited mobile optimization
 
-![alt text](<stats_page .png>)
+<img width="1913" height="886" alt="image" src="https://github.com/user-attachments/assets/5f498ed9-5c26-4f45-8fca-5bf422824e6e" />
+
 
 **After**: Sticky headers, optimized scrolling, and improved mobile viewing
 
-![alt text](image-3.png)
-![alt text](image-4.png)
+<img width="1912" height="822" alt="image" src="https://github.com/user-attachments/assets/a8311f1a-64f8-4005-a6f7-5e771d7c02e0" />
+
+<img width="355" height="628" alt="image" src="https://github.com/user-attachments/assets/c6d242dc-7568-4c31-ae6c-ace86c0e96b2" />
+
 
 ### Chart Buttons
 **Before**: Generic blue buttons that were hard to distinguish
 
-![alt text](image-6.png)
-![alt text](image-7.png)
+<img width="428" height="83" alt="image" src="https://github.com/user-attachments/assets/bb49eda1-ae1c-410f-996c-529ff85ddb91" />
+
+<img width="278" height="138" alt="image" src="https://github.com/user-attachments/assets/ab6427de-7bf7-49d4-8f8a-33bafa78a6c6" />
+
 
 **After**: Color-coded buttons (teal for State Chart, green for Workshop Chart) with improved typography and spacing
 
-![alt text](image-8.png)
-![alt text](image-9.png)
-
-## Technical Implementation
+<img width="354" height="75" alt="image" src="https://github.com/user-attachments/assets/6fce0137-9ce9-44c1-8313-38a8bd89e3ad" />
+<img width="434" height="106" alt="image" src="https://github.com/user-attachments/assets/909342e0-12c4-46f7-98f1-455374c25afa" />
 
 ### CSS Architecture
 - Mobile-first responsive approach
